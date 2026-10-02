@@ -32,9 +32,40 @@ function decorateRate(el) {
 }
 
 /**
+ * @param {Element} el
+ * @returns {boolean}
+ */
+function isHeading(el) {
+  return /^H[1-6]$/.test(el.tagName);
+}
+
+/**
+ * Whether the element holds a single link and no other text,
+ * e.g. <h4><a>Choices Fixed 2 years</a></h4> or <p><a>…</a></p>.
+ * @param {Element} el
+ * @returns {boolean}
+ */
+function isLinkOnly(el) {
+  const links = el.querySelectorAll('a');
+  return links.length === 1 && el.textContent.trim() === links[0].textContent.trim();
+}
+
+/**
+ * Product link: a (non-title) heading containing a link — the current content model,
+ * <h4><a>…</a></h4> — or, for older content, a paragraph holding a single link.
+ * @param {Element} el
+ * @returns {boolean}
+ */
+function isCta(el) {
+  if (isHeading(el)) return !!el.querySelector('a');
+  return el.tagName === 'P' && isLinkOnly(el);
+}
+
+/**
  * Cards (rate) — interest-rate tiles: eyebrow, product title, large rate, product link, note.
  * Content contract: one row per tile, a single cell holding
- * optional eyebrow paragraph, heading, rate paragraph ("5.29% p.a."), link, note.
+ * optional eyebrow paragraph, heading, rate paragraph ("5.29% p.a."),
+ * product link (<h4><a>…</a></h4>, or legacy <p><a>…</a></p>), note.
  * Every part is optional; extra cells are merged into the tile body.
  * @param {Element} block
  */
@@ -50,7 +81,11 @@ export default function decorate(block) {
     if (!body.textContent.trim()) return;
 
     const elements = [...body.children];
-    const heading = elements.find((el) => /^H[1-6]$/.test(el.tagName));
+    const headings = elements.filter(isHeading);
+    // title: first heading that is not just a link (that one is the product link);
+    // if every heading is a bare link, the first is a linked title only when another follows
+    const heading = headings.find((el) => !isLinkOnly(el))
+      || (headings.length > 1 ? headings[0] : undefined);
     const headingIndex = heading ? elements.indexOf(heading) : -1;
     let rateFound = false;
 
@@ -63,7 +98,7 @@ export default function decorate(block) {
         rateFound = true;
         return;
       }
-      if (el.querySelector('a')) {
+      if (isCta(el)) {
         el.classList.add('cards-rate-cta');
         return;
       }

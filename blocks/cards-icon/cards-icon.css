@@ -78,10 +78,18 @@ main > .section.cards-icon-container {
   color: var(--brand-navy);
   font-weight: 500;
   text-decoration: none;
+
+  /* source swaps the label colour instantly; only the tile shadow animates */
+  transition: none;
 }
 
 .cards-icon .cards-icon-tile-body a:focus-visible {
   outline: 0;
+}
+
+/* label turns red with the arrow on tile hover/focus (source a:hover/a:focus) */
+.cards-icon .cards-icon-tile:is(:hover, :has(a:focus-visible)) .cards-icon-tile-body a:any-link {
+  color: var(--brand-red);
 }
 
 /* trailing link arrow (navy at rest, red on tile hover/focus) */
