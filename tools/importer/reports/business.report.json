@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "url": "https://www.westpac.co.nz/business/",
+  "path": "business",
+  "timestamp": "2026-10-02T05:23:58.928Z",
+  "title": "Business banking | Westpac NZ",
+  "template": "homepage",
+  "blocks": [
+    "hero-campaign",
+    "cards-quicklink",
+    "columns-promo",
+    "columns-promo",
+    "cards-article",
+    "cards-article"
+  ]
+}

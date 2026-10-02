@@ -1,0 +1,22 @@
+{
+  "variantName": "columns-promo",
+  "baseBlock": "columns",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "pink",
+    "density": "spacious",
+    "purpose": "promo-feature",
+    "imagePattern": "large-right",
+    "structure": "h2 + p + cta | image"
+  },
+  "contentPattern": "One row, 2 cells: cell 1 H2 + p + CTA link, cell 2 image",
+  "usage": {
+    "pagesUsing": [
+      { "url": "https://www.westpac.co.nz/", "screenshot": "migration-work/screenshot.png" }
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-02"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

@@ -1,0 +1,22 @@
+{
+  "variantName": "cards-icon",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "product-nav",
+    "imagePattern": "icon-top",
+    "structure": "icon + link label"
+  },
+  "contentPattern": "One row per tile: cell 1 icon image, cell 2 link label",
+  "usage": {
+    "pagesUsing": [
+      { "url": "https://www.westpac.co.nz/", "screenshot": "migration-work/screenshot.png" }
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-02"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

@@ -1,0 +1,227 @@
+{
+  "templates": [
+    {
+      "name": "homepage",
+      "urls": [
+        "https://www.westpac.co.nz/",
+        "https://www.westpac.co.nz/about-us/",
+        "https://www.westpac.co.nz/business/"
+      ],
+      "representativeUrl": "https://www.westpac.co.nz/",
+      "description": "Homepage and section landing pages: red page header, icon tile and quick-link grids, featured rates, promo panels, article carousels",
+      "blocks": [
+        {
+          "name": "hero-campaign",
+          "instances": [
+            "section.page-header"
+          ]
+        },
+        {
+          "name": "cards-icon",
+          "instances": [
+            ".tile-block .tile-block__items"
+          ]
+        },
+        {
+          "name": "cards-quicklink",
+          "instances": [
+            ".quick-link-block .quick-link-block__items"
+          ]
+        },
+        {
+          "name": "cards-rate",
+          "instances": [
+            ".small-pricing-block .small-pricing-block__items"
+          ]
+        },
+        {
+          "name": "columns-promo",
+          "instances": [
+            ".promo-block"
+          ]
+        },
+        {
+          "name": "tabs-dropdown",
+          "instances": [
+            ".content-switch-block .content-switch-block__content-wrapper"
+          ]
+        },
+        {
+          "name": "columns-intro",
+          "instances": [
+            "#news-and-stories > .content-block"
+          ]
+        },
+        {
+          "name": "cards-article",
+          "instances": [
+            ".carousel-block .carousel-block__items"
+          ]
+        }
+      ],
+      "urlPattern": "/*",
+      "sections": [
+        {
+          "id": "rc2",
+          "name": "hero",
+          "selector": [
+            "section.page-header"
+          ],
+          "style": null,
+          "blocks": [
+            "hero-campaign"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc4",
+          "name": "how-can-we-help",
+          "selector": [
+            "#main > section:has(> #how-can-we-help)",
+            "#main > section:has(.tile-block)"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-icon"
+          ],
+          "defaultContent": [
+            ".tile-block__heading-wrapper h2"
+          ]
+        },
+        {
+          "id": "rc5",
+          "name": "quick-links",
+          "selector": [
+            "#main > section:has(> #get-help)",
+            "#main > section:has(.quick-link-block)"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-quicklink"
+          ],
+          "defaultContent": [
+            ".quick-link-block__heading"
+          ]
+        },
+        {
+          "id": "rc6",
+          "name": "featured-rates",
+          "selector": [
+            "#main > section:has(> #featured-rates)",
+            "#main > section:has(.small-pricing-block)"
+          ],
+          "style": "light-grey",
+          "blocks": [
+            "cards-rate"
+          ],
+          "defaultContent": [
+            ".small-pricing-block__left h2",
+            ".small-pricing-block__left .small-pricing-block__cta a",
+            ".small-pricing-block__disclaimer"
+          ]
+        },
+        {
+          "id": "rc7",
+          "name": "scams-promo",
+          "selector": [
+            "#main > section.u-background--pink-tint:has(.promo-block)"
+          ],
+          "style": "pink-tint",
+          "blocks": [
+            "columns-promo"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc8",
+          "name": "financial-wellbeing",
+          "selector": [
+            "#main > section.u-background--content-switch",
+            "#main > section:has(.content-switch-block)"
+          ],
+          "style": null,
+          "blocks": [
+            "tabs-dropdown"
+          ],
+          "defaultContent": [
+            ".content-switch-block__title"
+          ]
+        },
+        {
+          "id": "rc9",
+          "name": "news-and-stories-intro",
+          "selector": [
+            "#main > section:has(> #news-and-stories)"
+          ],
+          "style": "light-grey",
+          "blocks": [
+            "columns-intro"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc10",
+          "name": "news-and-stories-articles",
+          "selector": [
+            "#main > section.u-background--pale-grey:has(.carousel-block)",
+            "#main > section:has(.carousel-block)"
+          ],
+          "style": "light-grey",
+          "blocks": [
+            "cards-article"
+          ],
+          "defaultContent": [
+            ".carousel-block__heading"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "accounts-cards",
+      "urls": [
+        "https://www.westpac.co.nz/accounts-cards/",
+        "https://www.westpac.co.nz/accounts-cards/everyday-account/",
+        "https://www.westpac.co.nz/contact-us/complaints/",
+        "https://www.westpac.co.nz/credit-cards/",
+        "https://www.westpac.co.nz/credit-cards/airpoints/",
+        "https://www.westpac.co.nz/home-loans-mortgages/",
+        "https://www.westpac.co.nz/home-loans-mortgages/first-home/",
+        "https://www.westpac.co.nz/insurance/",
+        "https://www.westpac.co.nz/insurance/home-insurance/",
+        "https://www.westpac.co.nz/kiwisaver-investments/",
+        "https://www.westpac.co.nz/kiwisaver-investments/kiwisaver/",
+        "https://www.westpac.co.nz/personal-loans/",
+        "https://www.westpac.co.nz/personal-loans/car-loans/"
+      ],
+      "representativeUrl": "https://www.westpac.co.nz/accounts-cards/",
+      "description": "To be named in naming step",
+      "blocks": [],
+      "urlPattern": "/*"
+    },
+    {
+      "name": "help",
+      "urls": [
+        "https://www.westpac.co.nz/help/how-do-i-set-up-and-manage-an-automatic-payment/"
+      ],
+      "representativeUrl": "https://www.westpac.co.nz/help/how-do-i-set-up-and-manage-an-automatic-payment/",
+      "description": "To be named in naming step",
+      "blocks": [],
+      "urlPattern": "/help/*"
+    },
+    {
+      "name": "rednews",
+      "urls": [
+        "https://www.westpac.co.nz/rednews/pinpointing-nzs-most-underrated-suburbs/",
+        "https://www.westpac.co.nz/rednews/tiny-living-could-you-do-it/",
+        "https://www.westpac.co.nz/rednews/what-does-your-60000-deposit-buy/"
+      ],
+      "representativeUrl": "https://www.westpac.co.nz/rednews/pinpointing-nzs-most-underrated-suburbs/",
+      "description": "To be named in naming step",
+      "blocks": [],
+      "urlPattern": "/rednews/*"
+    }
+  ],
+  "metadata": {
+    "projectType": "da"
+  }
+}

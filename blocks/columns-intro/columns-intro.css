@@ -1,0 +1,70 @@
+/* columns-intro: section heading (left) + intro copy with inline links (right).
+ * Values extracted from westpac.co.nz `#news-and-stories > .content-block`. */
+
+/* the source block uses a reduced bottom padding so the intro reads as the
+ * heading of the article cards below; spacing measured from the end of the
+ * intro copy to the first card image (56px mobile, 74px >= 992px) */
+main > .section.columns-intro-container {
+  padding-bottom: 56px;
+}
+
+.columns-intro .columns-intro-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.columns-intro .columns-intro-heading-col h2,
+.columns-intro .columns-intro-heading-col h3 {
+  margin: 0 0 14px;
+}
+
+.columns-intro .columns-intro-text-col > * {
+  margin-top: 0;
+}
+
+.columns-intro .columns-intro-text-col > :last-child {
+  margin-bottom: 0;
+}
+
+.columns-intro .columns-intro-text-col p {
+  color: var(--text-color);
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+}
+
+.columns-intro .columns-intro-text-col a:any-link {
+  color: var(--link-color);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.columns-intro .columns-intro-text-col a:hover {
+  color: var(--link-hover-color);
+}
+
+@media (width >= 992px) {
+  main > .section.columns-intro-container {
+    padding-bottom: 74px;
+  }
+
+  .columns-intro .columns-intro-row {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 0 30px;
+  }
+
+  .columns-intro .columns-intro-heading-col {
+    grid-column: 1 / span 4;
+  }
+
+  .columns-intro .columns-intro-text-col {
+    grid-column: 5 / span 8;
+    margin-top: 2px;
+  }
+
+  /* any additional authored cells continue on the 12-col grid */
+  .columns-intro .columns-intro-text-col + .columns-intro-text-col {
+    grid-column: 5 / span 8;
+  }
+}

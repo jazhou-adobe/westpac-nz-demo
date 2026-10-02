@@ -1,0 +1,158 @@
+/* cards-quicklink: horizontal white utility tiles (icon + linked label + red arrow)
+ * values from www.westpac.co.nz .quick-link-block (computed styles + source rules)
+ * source breakpoints: 576px, 768px, 992px
+ */
+
+/* source uses .u-block--reduced-top when the quick links follow the tile grid */
+main > .section.cards-icon-container + .section.cards-quicklink-container {
+  padding-top: 10px;
+}
+
+.cards-quicklink > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px 30px;
+}
+
+.cards-quicklink .cards-quicklink-tile {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 20px 20px 16px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px 0 rgb(0 0 0 / 20%);
+  color: var(--brand-navy);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.3;
+  transition: box-shadow 0.2s;
+}
+
+.cards-quicklink .cards-quicklink-tile-linked {
+  cursor: pointer;
+}
+
+.cards-quicklink .cards-quicklink-tile-linked:hover {
+  box-shadow: 0 2px 15px 0 rgb(0 0 0 / 25%), 0 3px 8px 0 rgb(0 0 0 / 30%);
+}
+
+.cards-quicklink .cards-quicklink-tile:has(a:focus-visible) {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--brand-navy);
+}
+
+.cards-quicklink .cards-quicklink-tile-icon {
+  flex: 0 0 auto;
+  align-self: center;
+  padding-right: 14.4px;
+  line-height: 0;
+}
+
+.cards-quicklink .cards-quicklink-tile-icon picture {
+  display: block;
+}
+
+.cards-quicklink .cards-quicklink-tile-icon img {
+  display: block;
+  width: auto;
+  height: 40px;
+}
+
+.cards-quicklink .cards-quicklink-tile-body {
+  flex: 0 1 auto;
+  align-self: start;
+  min-width: 0;
+  margin-right: 16px;
+  overflow-wrap: anywhere;
+}
+
+.cards-quicklink .cards-quicklink-tile-icon + .cards-quicklink-tile-body {
+  align-self: center;
+}
+
+.cards-quicklink .cards-quicklink-tile-body > * {
+  margin: 0;
+  line-height: 1.3;
+}
+
+.cards-quicklink .cards-quicklink-tile-body a:any-link {
+  color: var(--brand-navy);
+  font-weight: 500;
+  text-decoration: none;
+  transition: none;
+}
+
+.cards-quicklink .cards-quicklink-tile-body a:focus-visible {
+  outline: 0;
+}
+
+.cards-quicklink .cards-quicklink-tile:is(:hover, :has(a:focus-visible)) .cards-quicklink-tile-body a:any-link {
+  color: var(--brand-red);
+}
+
+/* trailing red link arrow */
+.cards-quicklink .cards-quicklink-tile-body a::after {
+  content: '';
+  display: inline;
+  padding-left: 15px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 10'%3E%3Cpolygon fill='%23DA1710' points='5.96979167 0 4.66491667 1.28545455 7.49558333 4.09272727 0 4.09272727 0 5.90727273 7.49558333 5.90727273 4.66491667 8.71454545 5.96979167 10 11 5'/%3E%3C/svg%3E");
+  background-position: 100% calc(50% + 1px);
+  background-repeat: no-repeat;
+  background-size: 11px 10px;
+  line-height: 1;
+  vertical-align: baseline;
+}
+
+/* stretch the label link over the whole tile */
+.cards-quicklink .cards-quicklink-tile-linked a::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+@media (width >= 576px) {
+  .cards-quicklink > ul {
+    gap: 20px 30px;
+  }
+
+  .cards-quicklink .cards-quicklink-tile {
+    padding: 24px 20px 22px;
+  }
+}
+
+@media (width >= 768px) {
+  .cards-quicklink > ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 992px) {
+  main > .section.cards-icon-container + .section.cards-quicklink-container {
+    padding-top: 15px;
+  }
+
+  .cards-quicklink > ul {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* link-only lists use the source's two-column layout */
+  .cards-quicklink.cards-quicklink-no-icons > ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cards-quicklink .cards-quicklink-tile {
+    font-size: 22px;
+  }
+
+  .cards-quicklink .cards-quicklink-tile-icon {
+    padding-right: 17px;
+  }
+
+  .cards-quicklink .cards-quicklink-tile-body a::after {
+    padding-left: 22px;
+    background-size: 17px 16px;
+  }
+}

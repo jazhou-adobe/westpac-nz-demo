@@ -1,0 +1,18 @@
+{
+  "status": "success",
+  "url": "https://www.westpac.co.nz/",
+  "path": "index",
+  "timestamp": "2026-10-02T05:23:54.589Z",
+  "title": "Westpac New Zealand - Helping New Zealanders with their banking.",
+  "template": "homepage",
+  "blocks": [
+    "hero-campaign",
+    "cards-icon",
+    "cards-quicklink",
+    "cards-rate",
+    "columns-promo",
+    "tabs-dropdown",
+    "columns-intro",
+    "cards-article"
+  ]
+}

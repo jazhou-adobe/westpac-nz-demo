@@ -1,0 +1,22 @@
+{
+  "variantName": "tabs-dropdown",
+  "baseBlock": "tabs",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "medium",
+    "purpose": "content-switch",
+    "imagePattern": "noimg",
+    "structure": "label + dropdown + panels"
+  },
+  "contentPattern": "Row 0 (optional intro): H3 'I want to know more about' + helper text. One row per topic: cell 1 label, cell 2 panel content (4 tiles)",
+  "usage": {
+    "pagesUsing": [
+      { "url": "https://www.westpac.co.nz/", "screenshot": "migration-work/screenshot.png" }
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-02"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

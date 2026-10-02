@@ -1,0 +1,134 @@
+/* columns-promo: heading + copy + CTA beside a large image (source .promo-block) */
+
+/* vertical rhythm: section padding supplies the source u-block padding; stacked promos
+   (or a promo sharing a section with other content) get the same 2x gap the source has */
+.columns-promo-wrapper:not(:first-child) .columns-promo {
+  margin-top: calc(var(--section-padding) * 2);
+}
+
+.columns-promo-wrapper:not(:last-child) .columns-promo {
+  margin-bottom: calc(var(--section-padding) * 2);
+}
+
+.columns-promo .columns-promo-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.columns-promo .columns-promo-row + .columns-promo-row {
+  margin-top: calc(var(--section-padding) * 2);
+}
+
+/* image sits above the text on mobile, whichever side it is on at desktop */
+.columns-promo .columns-promo-img-col {
+  order: -1;
+  line-height: 0;
+}
+
+.columns-promo .columns-promo-img-col picture {
+  display: block;
+}
+
+.columns-promo .columns-promo-img-col img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 412 / 276;
+  object-fit: cover;
+}
+
+.columns-promo .columns-promo-text-col {
+  margin-top: 20px;
+}
+
+.columns-promo .columns-promo-row-single .columns-promo-text-col {
+  margin-top: 0;
+}
+
+/* text column */
+.columns-promo .columns-promo-text-col > * {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.columns-promo .columns-promo-text-col > :last-child {
+  margin-bottom: 0;
+}
+
+.columns-promo .columns-promo-text-col h2 {
+  color: var(--brand-navy);
+}
+
+/* CTAs: global red pill (primary) / outline pill (secondary), side by side;
+   source .btn is 9px tall-padding below 992px */
+.columns-promo .columns-promo-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  gap: 16px 14px;
+}
+
+.columns-promo .columns-promo-buttons p.button-wrapper {
+  margin: 0;
+}
+
+main .columns-promo a.button:any-link {
+  min-width: 120px;
+  padding: 9px 24px;
+  text-align: center;
+}
+
+/* source .btn--secondary: red outline, charcoal text, fills red on hover */
+main .columns-promo a.button.secondary:any-link {
+  border-color: var(--brand-red);
+}
+
+@media (width >= 576px) {
+  .columns-promo .columns-promo-img-col img {
+    aspect-ratio: 807 / 592;
+  }
+}
+
+@media (width >= 768px) {
+  .columns-promo .columns-promo-row {
+    flex-direction: row;
+  }
+
+  .columns-promo .columns-promo-img-col {
+    order: 0;
+    width: 58.3333%;
+  }
+
+  .columns-promo .columns-promo-text-col {
+    flex: 0 0 40%;
+    align-self: flex-start;
+    margin-top: 0;
+    margin-right: 30px;
+  }
+
+  .columns-promo .columns-promo-row-image-first .columns-promo-text-col {
+    margin-right: 0;
+    margin-left: 30px;
+  }
+
+  .columns-promo .columns-promo-row-single .columns-promo-text-col {
+    flex-basis: 100%;
+    margin: 0;
+  }
+}
+
+@media (width >= 992px) {
+  .columns-promo .columns-promo-text-col {
+    flex: 0 0 33.33%;
+    margin-right: 8.3333%;
+  }
+
+  .columns-promo .columns-promo-row-image-first .columns-promo-text-col {
+    margin-right: 0;
+    margin-left: 8.3333%;
+  }
+
+  main .columns-promo a.button:any-link {
+    padding: 14px 24px;
+  }
+}

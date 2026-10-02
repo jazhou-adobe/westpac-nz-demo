@@ -1,0 +1,285 @@
+/* tabs-dropdown: "I want to know more about [topic]" switcher (source: content-switch-block) */
+
+/* section heading above the block ("Financial wellbeing.") */
+.tabs-dropdown-container > .default-content-wrapper h2 {
+  margin-bottom: 16px;
+  font-family: var(--body-font-family);
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+.tabs-dropdown {
+  --tabs-dropdown-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%23DA1710' transform='translate(6 4) rotate(270) translate(-6 -4)' d='M5.27193272,7.00411523 L2,4.00823045 L5.28092165,1.00411523 C7.08542826,-0.648148807 8.56998079,-2 8.57992614,-2 C8.58987149,-2 8.91345711,-1.71109794 9.29900449,-1.35799572 L10,-0.71599144 L7.42472653,1.64202535 C6.00832591,2.93893531 4.84945306,4.00745086 4.84945306,4.01650436 C4.84945306,4.02555786 6.00226952,5.08848856 7.41126615,6.37857185 L9.97308067,8.72417975 L9.27655662,9.36208988 C8.89346717,9.71294025 8.57189363,10 8.56194828,10 C8.55200293,10 7.07149614,8.65185185 5.27193272,7.00411523 Z'/%3E%3C/svg%3E");
+  --tabs-dropdown-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 10'%3E%3Cpolygon fill='%23181B25' points='5.96979167 0 4.66491667 1.28545455 7.49558333 4.09272727 0 4.09272727 0 5.90727273 7.49558333 5.90727273 4.66491667 8.71454545 5.96979167 10 11 5'/%3E%3C/svg%3E");
+  --tabs-dropdown-arrow-hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 10'%3E%3Cpolygon fill='%23DA1710' points='5.96979167 0 4.66491667 1.28545455 7.49558333 4.09272727 0 4.09272727 0 5.90727273 7.49558333 5.90727273 4.66491667 8.71454545 5.96979167 10 11 5'/%3E%3C/svg%3E");
+
+  padding: 20px 16px;
+  background-color: var(--background-color);
+  box-shadow: 0 2px 10px 0 rgb(0 0 0 / 20%);
+  color: var(--text-color);
+}
+
+/* label + dropdown row */
+.tabs-dropdown .tabs-dropdown-header {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tabs-dropdown .tabs-dropdown-prompt > * {
+  margin: 0;
+  color: var(--brand-navy);
+  font-family: var(--heading-font-family);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.tabs-dropdown .tabs-dropdown-control {
+  width: calc(100% - 20px);
+  min-width: 200px;
+}
+
+/* native <select> styled as the source's underlined custom dropdown */
+.tabs-dropdown .tabs-dropdown-select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  height: 37px;
+  margin: 0;
+  padding: 0 28px 0 0;
+  border: 0;
+  border-bottom: 3px solid var(--brand-red);
+  border-radius: 0;
+  background-color: var(--background-color);
+  background-image: var(--tabs-dropdown-chevron);
+  background-position: right 0 center;
+  background-repeat: no-repeat;
+  background-size: 12px 8px;
+  color: var(--brand-navy);
+  font-family: var(--heading-font-family);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  appearance: none;
+}
+
+.tabs-dropdown .tabs-dropdown-select:focus {
+  outline: none;
+  box-shadow: 0 0 3px 2px rgb(153 26 214 / 50%);
+}
+
+.tabs-dropdown .tabs-dropdown-select option {
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.tabs-dropdown .tabs-dropdown-select option:checked {
+  color: var(--brand-red);
+  font-weight: 500;
+}
+
+/* helper text ("Take control of your finances...") */
+.tabs-dropdown .tabs-dropdown-helper {
+  margin: 30px 24px 0 0;
+}
+
+.tabs-dropdown .tabs-dropdown-helper > * {
+  margin: 0;
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+}
+
+/* panels */
+.tabs-dropdown .tabs-dropdown-panels {
+  margin-top: 30px;
+}
+
+.tabs-dropdown .tabs-dropdown-panel[hidden] {
+  display: none;
+}
+
+/* tile grid (up to 4 tiles per panel) */
+.tabs-dropdown .tabs-dropdown-tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tabs-dropdown .tabs-dropdown-tile {
+  display: flex;
+  margin: 0;
+}
+
+.tabs-dropdown .tabs-dropdown-tile-image {
+  flex: 0 0 auto;
+  width: 30%;
+  min-width: 80px;
+  max-width: 100px;
+}
+
+.tabs-dropdown .tabs-dropdown-tile-image > *,
+.tabs-dropdown .tabs-dropdown-tile-image picture {
+  display: block;
+  margin: 0;
+}
+
+.tabs-dropdown .tabs-dropdown-tile-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.tabs-dropdown .tabs-dropdown-tile-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-left: 16px;
+}
+
+.tabs-dropdown .tabs-dropdown-tile-body > * {
+  margin: 0;
+}
+
+.tabs-dropdown .tabs-dropdown-tile-body > p {
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+}
+
+.tabs-dropdown .tabs-dropdown-tile-body > .tabs-dropdown-tile-title {
+  margin: 0 0 8px;
+  padding-right: 13px;
+  color: var(--brand-navy);
+  font-family: var(--body-font-family);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.tabs-dropdown .tabs-dropdown-tile-title a:any-link {
+  color: var(--brand-navy);
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+.tabs-dropdown .tabs-dropdown-tile-title a:hover,
+.tabs-dropdown .tabs-dropdown-tile-title a:focus-visible {
+  color: var(--brand-red);
+}
+
+.tabs-dropdown .tabs-dropdown-tile-title a::after {
+  content: "";
+  padding-left: 19px;
+  background-image: var(--tabs-dropdown-arrow);
+  background-position: 100% calc(50% + 1px);
+  background-repeat: no-repeat;
+  background-size: 13px 12px;
+  line-height: 1;
+}
+
+.tabs-dropdown .tabs-dropdown-tile-title a:hover::after,
+.tabs-dropdown .tabs-dropdown-tile-title a:focus-visible::after {
+  background-image: var(--tabs-dropdown-arrow-hover);
+}
+
+@media (width >= 576px) {
+  .tabs-dropdown {
+    padding: 30px 20px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-prompt {
+    margin-right: 12px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-control {
+    width: calc(66.6667% - 100px);
+  }
+
+  .tabs-dropdown .tabs-dropdown-select {
+    padding-right: 31px;
+    background-size: 15px 10px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px 20px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-tile {
+    display: block;
+  }
+
+  .tabs-dropdown .tabs-dropdown-tile-image {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .tabs-dropdown .tabs-dropdown-tile-image img {
+    aspect-ratio: 5 / 4;
+  }
+
+  .tabs-dropdown .tabs-dropdown-tile-body {
+    margin: 15px 0 0;
+  }
+}
+
+@media (width >= 992px) {
+  .tabs-dropdown-container > .default-content-wrapper h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  .tabs-dropdown {
+    padding: 50px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-prompt > * {
+    font-size: 44px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-control {
+    width: calc(50% - 140px);
+  }
+
+  .tabs-dropdown .tabs-dropdown-select {
+    height: 53px;
+    padding-right: 34px;
+    background-size: 18px 12px;
+    font-size: 44px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-helper,
+  .tabs-dropdown .tabs-dropdown-panels {
+    margin-top: 50px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0 30px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-tile-body {
+    margin-top: 24px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-tile-body > .tabs-dropdown-tile-title {
+    margin-bottom: 10px;
+    padding-right: 17px;
+    font-size: 24px;
+  }
+
+  .tabs-dropdown .tabs-dropdown-tile-title a::after {
+    padding-left: 23px;
+    background-size: 17px 16px;
+  }
+}

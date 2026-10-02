@@ -1,0 +1,46 @@
+/* Westpac NZ brand tokens (extracted from www.westpac.co.nz) */
+:root {
+  /* brand colors */
+  --brand-red: #da1710;
+  --brand-navy: #1f1b4f;
+  --brand-charcoal: #181b25;
+  --brand-muted: #525271;
+  --brand-pale-grey: #f6f6f8;
+  --brand-pink-tint: #ffd9f7;
+  --brand-border: #dedee1;
+
+  /* fonts */
+  --heading-font-family: 'Westpac bold', westpac-fallback, helvetica, arial, sans-serif;
+  --body-font-family: national, national-fallback, helvetica, arial, sans-serif;
+
+  /* layout */
+  --content-max-width: 1550px;
+  --content-padding: 20px;
+  --section-padding: 40px;
+}
+
+@media (width >= 768px) {
+  :root {
+    --content-padding: 30px;
+    --section-padding: 50px;
+  }
+}
+
+@media (width >= 992px) {
+  :root {
+    --content-padding: 50px;
+  }
+}
+
+@media (width >= 1200px) {
+  :root {
+    --content-padding: 80px;
+    --section-padding: 70px;
+  }
+}
+
+@media (width >= 1440px) {
+  :root {
+    --content-padding: 100px;
+  }
+}

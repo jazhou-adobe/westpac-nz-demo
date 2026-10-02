@@ -1,0 +1,22 @@
+{
+  "variantName": "cards-article",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "light-on-grey",
+    "density": "medium",
+    "purpose": "news-teasers",
+    "imagePattern": "image-top",
+    "structure": "image + h3 + p"
+  },
+  "contentPattern": "One row per article: cell 1 image, cell 2 H3 (linked) + paragraph",
+  "usage": {
+    "pagesUsing": [
+      { "url": "https://www.westpac.co.nz/", "screenshot": "migration-work/screenshot.png" }
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-02"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

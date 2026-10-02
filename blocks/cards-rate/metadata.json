@@ -1,0 +1,22 @@
+{
+  "variantName": "cards-rate",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "light-on-grey",
+    "density": "medium",
+    "purpose": "interest-rates",
+    "imagePattern": "noimg",
+    "structure": "eyebrow + h3 + rate + link + note"
+  },
+  "contentPattern": "One row per tile, single cell: p eyebrow (optional), H3 product, p rate (e.g. '5.29% p.a.'), H4/link product CTA, p note",
+  "usage": {
+    "pagesUsing": [
+      { "url": "https://www.westpac.co.nz/", "screenshot": "migration-work/screenshot.png" }
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-02"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

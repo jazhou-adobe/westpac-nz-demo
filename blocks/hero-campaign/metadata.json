@@ -1,0 +1,22 @@
+{
+  "variantName": "hero-campaign",
+  "baseBlock": "hero",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "red",
+    "density": "spacious",
+    "purpose": "campaign-hero",
+    "imagePattern": "split-right",
+    "structure": "h1 + p + caption + cta + image"
+  },
+  "contentPattern": "Row 1: image (portrait). Row 2: H1, paragraph, caption paragraph, CTA link",
+  "usage": {
+    "pagesUsing": [
+      { "url": "https://www.westpac.co.nz/", "screenshot": "migration-work/screenshot.png" }
+    ],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-02"
+  },
+  "options": [],
+  "memberVariantIds": []
+}

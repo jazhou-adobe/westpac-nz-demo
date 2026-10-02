@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "url": "https://www.westpac.co.nz/about-us/",
+  "path": "about-us",
+  "timestamp": "2026-10-02T05:23:56.693Z",
+  "title": "About us | Westpac NZ",
+  "template": "homepage",
+  "blocks": [
+    "hero-campaign",
+    "cards-quicklink",
+    "cards-quicklink",
+    "columns-promo",
+    "columns-promo",
+    "columns-promo"
+  ]
+}

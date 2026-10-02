@@ -1,0 +1,307 @@
+/*
+ * hero-campaign: full-bleed Westpac red page header.
+ * Values extracted from www.westpac.co.nz section.page-header computed styles.
+ */
+
+/* full-bleed: escape the section max-width / padding */
+main > .section.hero-campaign-container {
+  padding-bottom: 0;
+}
+
+main > .section.hero-campaign-container > .hero-campaign-wrapper {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* default content that follows the hero inside the same section keeps its spacing */
+main > .section.hero-campaign-container > .hero-campaign-wrapper:not(:last-child) {
+  margin-bottom: var(--section-padding);
+}
+
+main > .section.hero-campaign-container:has(> .hero-campaign-wrapper:not(:last-child)) {
+  padding-bottom: var(--section-padding);
+}
+
+.hero-campaign {
+  --hero-campaign-gutter: 0px;
+  --hero-campaign-max: 100%;
+  --hero-campaign-stripe: rgb(153 26 214);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--brand-red);
+  color: #fff;
+}
+
+/* ---------- media ---------- */
+.hero-campaign .hero-campaign-media {
+  position: relative;
+  z-index: 2;
+  order: 1;
+  width: 100%;
+  height: 200px;
+  line-height: 0;
+}
+
+.hero-campaign .hero-campaign-media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-campaign .hero-campaign-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* ---------- text panel ---------- */
+.hero-campaign .hero-campaign-content {
+  position: relative;
+  z-index: 2;
+  order: 2;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 20px 36px 40px 20px;
+}
+
+.hero-campaign .hero-campaign-content > :first-child {
+  margin-top: 0;
+}
+
+.hero-campaign h1,
+.hero-campaign h2 {
+  margin: 0;
+  color: #fff;
+  font-family: var(--heading-font-family);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 0.85;
+  text-transform: uppercase;
+}
+
+.hero-campaign.hero-campaign-macron h1,
+.hero-campaign.hero-campaign-macron h2 {
+  line-height: 1;
+}
+
+.hero-campaign p {
+  color: #fff;
+}
+
+.hero-campaign .hero-campaign-lead {
+  margin: 16px 0 0;
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.hero-campaign .hero-campaign-caption {
+  margin: 12px 0 20px;
+  font-size: var(--body-font-size-xs);
+  line-height: 1.6;
+}
+
+.hero-campaign .hero-campaign-cta {
+  margin: 25px 0 0;
+}
+
+.hero-campaign .hero-campaign-cta + .hero-campaign-cta {
+  margin-top: 14px;
+}
+
+/* CTA: white pill with red text (inverted tertiary button on red) */
+main .hero-campaign .hero-campaign-cta a:any-link {
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 120px;
+  max-width: 100%;
+  margin: 0;
+  border: 1px solid #fff;
+  border-radius: 25px;
+  padding: 9px 24px;
+  background-color: #fff;
+  color: var(--brand-red);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+main .hero-campaign .hero-campaign-cta a:any-link:hover,
+main .hero-campaign .hero-campaign-cta a:any-link:focus-visible {
+  border-color: rgb(255 255 255 / 80%);
+  background-color: rgb(255 255 255 / 80%);
+  color: var(--brand-red);
+}
+
+main .hero-campaign .hero-campaign-cta a:any-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ---------- stripe variant (homepage) ---------- */
+.hero-campaign.stripe::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  width: 16px;
+  background-color: var(--hero-campaign-stripe);
+}
+
+.hero-campaign.stripe .hero-campaign-content {
+  padding: 40px 20px 40px 36px;
+}
+
+/* ---------- small tablet ---------- */
+@media (width >= 576px) {
+  .hero-campaign .hero-campaign-content {
+    padding: 20px 46px 40px 30px;
+  }
+
+  .hero-campaign h1,
+  .hero-campaign h2 {
+    font-size: 40px;
+  }
+
+  .hero-campaign .hero-campaign-cta {
+    margin-top: 28px;
+  }
+}
+
+/* ---------- tablet / desktop: text left, image right ---------- */
+@media (width >= 768px) {
+  .hero-campaign {
+    --hero-campaign-gutter: 30px;
+    --hero-campaign-max: 768px;
+
+    flex-direction: row;
+    align-items: center;
+    min-height: 300px;
+    padding-right: max(
+      var(--hero-campaign-gutter),
+      calc((100% - var(--hero-campaign-max)) / 2 + var(--hero-campaign-gutter))
+    );
+    padding-left: max(
+      var(--hero-campaign-gutter-start, var(--hero-campaign-gutter)),
+      calc((100% - var(--hero-campaign-max)) / 2 + var(--hero-campaign-gutter-start, var(--hero-campaign-gutter)))
+    );
+  }
+
+  .hero-campaign .hero-campaign-content {
+    width: 83.3333%;
+    padding: 20px 0 50px;
+  }
+
+  .hero-campaign.hero-campaign-has-media .hero-campaign-content {
+    width: calc(50% - 30px);
+  }
+
+  .hero-campaign .hero-campaign-media {
+    position: absolute;
+    inset: 0 0 0 63%;
+    z-index: 1;
+    width: auto;
+    height: auto;
+  }
+
+  .hero-campaign .hero-campaign-lead {
+    margin-top: 20px;
+  }
+
+  .hero-campaign.stripe::after {
+    width: 24px;
+  }
+
+  .hero-campaign.stripe {
+    min-height: 0;
+  }
+
+  .hero-campaign.stripe .hero-campaign-content {
+    padding: 50px 0;
+  }
+}
+
+@media (width >= 992px) {
+  .hero-campaign {
+    --hero-campaign-gutter: 50px;
+    --hero-campaign-max: var(--content-max-width);
+
+    min-height: 400px;
+  }
+
+  .hero-campaign .hero-campaign-content {
+    width: 58.3333%;
+    padding: 30px 0 40px;
+  }
+
+  .hero-campaign.hero-campaign-has-media .hero-campaign-content {
+    width: calc(58.3333% - 50px);
+  }
+
+  .hero-campaign .hero-campaign-media {
+    left: 60%;
+  }
+
+  .hero-campaign h1,
+  .hero-campaign h2 {
+    font-size: 54px;
+  }
+
+  .hero-campaign .hero-campaign-lead {
+    margin-top: 30px;
+    font-size: var(--body-font-size-l);
+  }
+
+  .hero-campaign .hero-campaign-caption {
+    margin-top: 16px;
+  }
+
+  .hero-campaign .hero-campaign-cta {
+    margin-top: 40px;
+  }
+
+  main .hero-campaign .hero-campaign-cta a:any-link {
+    padding: 14px 24px;
+  }
+
+  .hero-campaign.stripe {
+    min-height: 300px;
+  }
+}
+
+/* homepage header indents its text 50px until the regular gutter catches up */
+@media (768px <= width < 1200px) {
+  .hero-campaign.stripe {
+    --hero-campaign-gutter-start: 50px;
+  }
+}
+
+@media (width >= 1200px) {
+  .hero-campaign {
+    --hero-campaign-gutter: 80px;
+  }
+
+  .hero-campaign.stripe .hero-campaign-content {
+    padding: 80px 0;
+  }
+}
+
+@media (width >= 1440px) {
+  .hero-campaign {
+    --hero-campaign-gutter: 100px;
+  }
+
+  .hero-campaign .hero-campaign-media {
+    left: 57%;
+  }
+}
