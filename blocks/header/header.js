@@ -13,6 +13,10 @@
  *   5. search      – heading + link (href = search results URL, text = placeholder)
  *   6. secondary   – list of main nav items; plain-text items open a megamenu
  *   7+ megamenus   – heading (matches a plain-text item in 6), intro link, list of cards
+ *   mobile-only    – a list of icon links (mobile utility labels) and, per audience
+ *                    segment, a section whose heading is the segment link followed by a
+ *                    nested list (group link > child links). The active segment's mobile
+ *                    panel is built from the secondary nav + megamenus.
  */
 
 const DESKTOP_QUERY = window.matchMedia('(min-width: 1200px)');
@@ -134,7 +138,7 @@ function buildLinkList(section, navClass, label) {
   return el('nav', { class: navClass, 'aria-label': label }, ul);
 }
 
-function buildLogin(section, block) {
+function buildLogin(section, block, onMobileOpen) {
   const list = section?.querySelector('ul');
   if (!list) return null;
   const options = [...list.querySelectorAll(':scope > li a')]
@@ -195,11 +199,19 @@ function buildLogin(section, block) {
     toggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
   });
   loginButton.addEventListener('click', () => {
+    // mobile: the login button opens the login drawer instead of navigating
+    if (!DESKTOP_QUERY.matches && onMobileOpen) {
+      onMobileOpen(loginButton);
+      return;
+    }
     window.location.href = selected.href;
   });
 
   render();
-  return el('nav', { class: 'nav-login', 'aria-label': 'Login' }, toggle, ul, loginButton);
+  return {
+    nav: el('nav', { class: 'nav-login', 'aria-label': 'Login' }, toggle, ul, loginButton),
+    options,
+  };
 }
 
 function buildSearch(section) {
@@ -328,17 +340,196 @@ function buildSecondary(section, megaSections, block) {
 }
 
 /* ---------------------------------------------------------------- */
-/* mobile menu (hamburger)                                           */
+/* mobile drawer (hamburger) – slide-in segment panels + accordions  */
 /* ---------------------------------------------------------------- */
 
-function setMobileMenu(wrapper, open) {
-  const button = wrapper.querySelector('.nav-hamburger button');
-  if (!button) return;
-  const isOpen = open && !DESKTOP_QUERY.matches;
-  wrapper.classList.toggle('nav-mobile-open', isOpen);
-  button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  button.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
-  document.body.style.overflow = isOpen ? 'hidden' : '';
+const PANEL_TRANSITION_MS = 300;
+
+function headingOf(section) {
+  return section.querySelector(':scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6');
+}
+
+/** groups for the active segment, derived from the secondary nav + megamenus */
+function groupsFromSecondary(secondarySec, megaSections) {
+  const list = secondarySec?.querySelector('ul');
+  if (!list) return [];
+  return [...list.querySelectorAll(':scope > li')].map((li) => {
+    const link = li.querySelector('a');
+    if (link) return { label: text(link), href: link.getAttribute('href'), children: [] };
+    const label = text(li);
+    const sec = megaSections.find((m) => text(headingOf(m)).toLowerCase() === label.toLowerCase());
+    if (!sec) return { label, href: null, children: [] };
+    const intro = sec.querySelector(':scope > p a');
+    const children = [...sec.querySelectorAll(':scope > ul > li')].map((card) => card.querySelector('a'))
+      .filter(Boolean).map((a) => ({ label: text(a), href: a.getAttribute('href') }));
+    return { label, href: intro ? intro.getAttribute('href') : null, children };
+  }).filter((g) => g.label);
+}
+
+/** groups from a mobile-only segment section (heading link + nested list) */
+function groupsFromSegmentSection(section) {
+  const list = section.querySelector(':scope > ul');
+  if (!list) return [];
+  return [...list.querySelectorAll(':scope > li')].map((li) => {
+    const link = li.querySelector(':scope > a, :scope > p > a');
+    const sub = li.querySelector(':scope > ul');
+    const children = sub ? [...sub.querySelectorAll(':scope > li > a, :scope > li > p > a')]
+      .map((a) => ({ label: text(a), href: a.getAttribute('href') })) : [];
+    return { label: text(link) || text(li), href: link ? link.getAttribute('href') : null, children };
+  }).filter((g) => g.label);
+}
+
+function buildGroupItem(group, panel) {
+  const item = el('li', { class: 'nav-panel-item' });
+  item.append(group.href
+    ? el('a', { href: group.href }, group.label)
+    : el('span', { class: 'nav-panel-label' }, group.label));
+  if (!group.children.length) {
+    item.classList.add('nav-panel-item-leaf');
+    return item;
+  }
+  const groupId = uid('nav-group');
+  const toggle = el('button', {
+    type: 'button',
+    class: 'nav-group-toggle',
+    'aria-expanded': 'false',
+    'aria-controls': groupId,
+    'aria-label': `Show ${group.label} links`,
+  }, el('span', { class: 'nav-sr' }, group.label));
+  const sub = el('ul', { class: 'nav-group', id: groupId });
+  group.children.forEach((c) => sub.append(el('li', {}, el('a', { href: c.href }, c.label))));
+  toggle.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    // single-expand: collapse the other groups in this panel
+    panel.querySelectorAll('.nav-group-toggle[aria-expanded="true"]').forEach((other) => {
+      if (other === toggle) return;
+      other.setAttribute('aria-expanded', 'false');
+      other.nextElementSibling.style.maxHeight = '0px';
+    });
+    toggle.setAttribute('aria-expanded', open ? 'false' : 'true');
+    sub.style.maxHeight = open ? '0px' : `${sub.scrollHeight}px`;
+  });
+  item.append(toggle, sub);
+  return item;
+}
+
+function showPanel(panel) {
+  panel.classList.remove('nav-panel-hidden');
+  // force a reflow so the slide-in transition runs from the off-canvas position
+  panel.getBoundingClientRect();
+  panel.classList.add('nav-panel-active');
+}
+
+function hidePanel(panel) {
+  panel.classList.remove('nav-panel-active');
+  setTimeout(() => {
+    if (!panel.classList.contains('nav-panel-active')) panel.classList.add('nav-panel-hidden');
+  }, PANEL_TRANSITION_MS);
+}
+
+function resetGroups(scope) {
+  scope.querySelectorAll('.nav-group-toggle[aria-expanded="true"]').forEach((t) => {
+    t.setAttribute('aria-expanded', 'false');
+    t.nextElementSibling.style.maxHeight = '0px';
+  });
+}
+
+function buildDrawer({
+  segmentSec, mobileUtilitySec, utilitySec, segmentSections, secondarySec, megaSections,
+}) {
+  const content = el('div', { class: 'nav-content' });
+  const root = el('div', { class: 'nav-panel nav-panel-root nav-panel-active', 'data-depth': '0' });
+  root.append(el('div', { class: 'nav-panel-head' }));
+  const rootList = el('ul', { class: 'nav-panel-list' });
+  root.append(rootList);
+  content.append(root);
+
+  const segLinks = [...(segmentSec?.querySelectorAll('ul > li') || [])].map((li) => {
+    const a = li.querySelector('a');
+    return a ? { label: text(a), href: a.getAttribute('href'), active: !!li.querySelector('strong, b') } : null;
+  }).filter(Boolean);
+
+  segLinks.forEach((seg) => {
+    const item = el('li', { class: `nav-panel-item${seg.active ? ' nav-panel-item-current' : ''}` }, el('a', { href: seg.href }, seg.label));
+    const section = segmentSections.find((s) => {
+      const link = headingOf(s).querySelector('a');
+      return text(link).toLowerCase() === seg.label.toLowerCase();
+    });
+    let groups = [];
+    if (section) groups = groupsFromSegmentSection(section);
+    else if (seg.active) groups = groupsFromSecondary(secondarySec, megaSections);
+    if (groups.length) {
+      const panel = el('div', { class: 'nav-panel nav-panel-hidden', 'data-depth': '1', id: uid('nav-panel') });
+      const back = el('button', { type: 'button', class: 'nav-back', 'aria-label': 'Back' });
+      const titleLink = section ? headingOf(section).querySelector('a') : null;
+      panel.append(el(
+        'div',
+        { class: 'nav-panel-title' },
+        back,
+        el('span', {}, el('a', { href: titleLink ? titleLink.getAttribute('href') : seg.href }, seg.label)),
+      ));
+      const list = el('ul', { class: 'nav-panel-list' });
+      groups.forEach((g) => list.append(buildGroupItem(g, panel)));
+      panel.append(list);
+      content.append(panel);
+
+      const next = el('button', {
+        type: 'button',
+        class: 'nav-panel-next',
+        'aria-controls': panel.id,
+        'aria-label': `Show ${seg.label} menu`,
+      }, el('span', { class: 'nav-sr' }, seg.label));
+      next.addEventListener('click', () => {
+        showPanel(panel);
+        setTimeout(() => back.focus(), PANEL_TRANSITION_MS);
+      });
+      back.addEventListener('click', () => {
+        hidePanel(panel);
+        resetGroups(panel);
+        next.focus();
+      });
+      item.append(next);
+    } else {
+      item.classList.add('nav-panel-item-leaf');
+    }
+    rootList.append(item);
+  });
+
+  // utilities (mobile labels when provided, else desktop labels)
+  const utilSource = mobileUtilitySec || utilitySec;
+  const utilList = el('ul', { class: 'nav-drawer-utilities' });
+  [...(utilSource?.querySelectorAll('ul > li') || [])].forEach((li) => {
+    const a = li.querySelector('a');
+    if (!a) return;
+    const link = el('a', { href: a.getAttribute('href') });
+    const img = a.querySelector('img');
+    if (img) {
+      const icon = img.cloneNode(true);
+      icon.className = 'nav-utility-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      link.append(icon);
+    }
+    link.append(text(a));
+    utilList.append(el('li', {}, link));
+  });
+  if (utilList.children.length) root.append(utilList);
+
+  return el('nav', { class: 'nav-drawer', 'aria-label': 'Mobile navigation', hidden: true }, content);
+}
+
+function buildLoginDrawer(brand, options) {
+  if (!options?.length) return null;
+  const close = el('button', { type: 'button', class: 'nav-login-drawer-close', 'aria-label': 'Close login menu' }, el('span'));
+  const head = el('div', { class: 'nav-login-drawer-head' });
+  if (brand) {
+    const logo = brand.cloneNode(true);
+    logo.className = 'nav-login-drawer-brand';
+    head.append(logo);
+  }
+  head.append(close);
+  const list = el('ul', { class: 'nav-login-drawer-list' });
+  options.forEach((o) => list.append(el('li', {}, el('a', { href: o.href }, o.label))));
+  return el('nav', { class: 'nav-login-drawer', 'aria-label': 'Login options', hidden: true }, head, list);
 }
 
 /**
@@ -352,8 +543,11 @@ export default async function decorate(block) {
 
   const sections = [...fragment.children].filter((child) => child.tagName === 'DIV');
   const [
-    brandSec, segmentSec, utilitySec, loginSec, searchSec, secondarySec, ...megaSecs
+    brandSec, segmentSec, utilitySec, loginSec, searchSec, secondarySec, ...rest
   ] = sections;
+  const megaSections = rest.filter((s) => headingOf(s) && !headingOf(s).querySelector('a'));
+  const segmentSections = rest.filter((s) => headingOf(s)?.querySelector('a'));
+  const mobileUtilitySec = rest.find((s) => !headingOf(s) && s.querySelector('ul img'));
 
   const wrapper = el('div', { class: 'nav-wrapper' });
 
@@ -364,7 +558,8 @@ export default async function decorate(block) {
     'aria-label': 'Open navigation',
     'aria-expanded': 'false',
   }, el('span', { class: 'nav-hamburger-icon' }));
-  top.append(el('div', { class: 'nav-hamburger' }, hamburgerButton));
+  const hamburger = el('div', { class: 'nav-hamburger' }, hamburgerButton);
+  top.append(hamburger);
 
   const brand = buildBrand(brandSec);
   if (brand) top.append(brand);
@@ -375,31 +570,119 @@ export default async function decorate(block) {
   const tools = el('div', { class: 'nav-tools' });
   const utilities = buildLinkList(utilitySec, 'nav-utilities', 'utilities');
   if (utilities) tools.append(utilities);
-  const login = buildLogin(loginSec, block);
-  if (login) tools.append(login);
+
+  // mobile drawers + shared overlay
+  const overlay = el('div', { class: 'nav-mobile-overlay', hidden: true });
+  const drawer = buildDrawer({
+    segmentSec, mobileUtilitySec, utilitySec, segmentSections, secondarySec, megaSections,
+  });
+  let loginDrawer = null;
+  let lastOpener = null;
+
+  const lockScroll = (lock) => { document.body.style.overflow = lock ? 'hidden' : ''; };
+
+  const openLayer = (layer, cls) => {
+    layer.hidden = false;
+    overlay.hidden = false;
+    layer.getBoundingClientRect();
+    wrapper.classList.add(cls);
+    lockScroll(true);
+  };
+  const closeLayer = (layer, cls) => {
+    if (!layer || !wrapper.classList.contains(cls)) return;
+    wrapper.classList.remove(cls);
+    setTimeout(() => {
+      if (wrapper.classList.contains(cls)) return;
+      layer.hidden = true;
+      if (!wrapper.classList.contains('nav-mobile-open') && !wrapper.classList.contains('nav-login-open')) {
+        overlay.hidden = true;
+      }
+    }, PANEL_TRANSITION_MS);
+    if (!wrapper.classList.contains('nav-mobile-open') && !wrapper.classList.contains('nav-login-open')) {
+      lockScroll(false);
+    }
+  };
+
+  const resetDrawer = () => {
+    drawer.querySelectorAll('.nav-panel[data-depth="1"]').forEach((p) => {
+      p.classList.remove('nav-panel-active');
+      p.classList.add('nav-panel-hidden');
+    });
+    resetGroups(drawer);
+  };
+
+  const setMobileMenu = (open) => {
+    const isOpen = open && !DESKTOP_QUERY.matches;
+    if (isOpen) {
+      resetDrawer();
+      openLayer(drawer, 'nav-mobile-open');
+    } else {
+      closeLayer(drawer, 'nav-mobile-open');
+    }
+    hamburgerButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    hamburgerButton.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+  };
+
+  const setLoginDrawer = (open, opener) => {
+    if (!loginDrawer) return;
+    if (open && !DESKTOP_QUERY.matches) {
+      lastOpener = opener || null;
+      openLayer(loginDrawer, 'nav-login-open');
+      loginDrawer.querySelector('.nav-login-drawer-close').focus();
+    } else {
+      closeLayer(loginDrawer, 'nav-login-open');
+      if (lastOpener) lastOpener.focus();
+      lastOpener = null;
+    }
+  };
+
+  const login = buildLogin(loginSec, block, (opener) => setLoginDrawer(true, opener));
+  if (login) {
+    tools.append(login.nav);
+    loginDrawer = buildLoginDrawer(brand, login.options);
+    loginDrawer?.querySelector('.nav-login-drawer-close')
+      .addEventListener('click', () => setLoginDrawer(false));
+  }
   const search = buildSearch(searchSec);
   if (search.button) tools.append(search.button);
   top.append(tools);
   wrapper.append(top);
 
-  // row 1 – secondary nav with megamenus
-  const secondary = buildSecondary(secondarySec, megaSecs, block);
+  // row 1 – secondary nav with megamenus (desktop)
+  const secondary = buildSecondary(secondarySec, megaSections, block);
   if (secondary) wrapper.append(secondary);
 
+  // the mobile drawers only live in the DOM below the desktop breakpoint
+  const mobileLayers = [overlay, drawer, loginDrawer].filter(Boolean);
+  const mountMobileLayers = () => {
+    if (DESKTOP_QUERY.matches) mobileLayers.forEach((layer) => layer.remove());
+    else mobileLayers.forEach((layer) => { if (!layer.isConnected) wrapper.append(layer); });
+  };
+  mountMobileLayers();
   block.append(wrapper);
   if (search.modal) block.append(search.modal);
 
   /* ---- behaviour ---- */
   if (search.button) {
-    search.button.addEventListener('click', () => openSearch(block));
+    search.button.addEventListener('click', () => {
+      setMobileMenu(false);
+      setLoginDrawer(false);
+      openSearch(block);
+    });
     search.close.addEventListener('click', () => closeSearch(block));
     search.form.addEventListener('submit', (e) => {
       if (!search.input.value.trim()) e.preventDefault();
     });
   }
 
-  hamburgerButton.addEventListener('click', () => {
-    setMobileMenu(wrapper, hamburgerButton.getAttribute('aria-expanded') !== 'true');
+  // listen on the wrapper so both the button and its container toggle the menu
+  hamburger.addEventListener('click', () => {
+    setMobileMenu(hamburgerButton.getAttribute('aria-expanded') !== 'true');
+  });
+
+  overlay.addEventListener('click', () => {
+    setMobileMenu(false);
+    setLoginDrawer(false);
   });
 
   document.addEventListener('click', (e) => {
@@ -413,22 +696,30 @@ export default async function decorate(block) {
       closeSearch(block);
       return;
     }
+    if (wrapper.classList.contains('nav-login-open')) {
+      setLoginDrawer(false);
+      return;
+    }
+    if (wrapper.classList.contains('nav-mobile-open')) {
+      setMobileMenu(false);
+      hamburgerButton.focus();
+      return;
+    }
     const open = block.querySelector('.nav-mega-trigger[aria-expanded="true"], .nav-login-toggle[aria-expanded="true"]');
     closeAll(block);
     if (open && block.contains(document.activeElement)) open.focus();
-    if (wrapper.classList.contains('nav-mobile-open')) {
-      setMobileMenu(wrapper, false);
-      hamburgerButton.focus();
-    }
   });
 
   block.addEventListener('focusout', (e) => {
     if (e.relatedTarget && !block.contains(e.relatedTarget)) closeAll(block);
   });
 
-  // reset transient state when crossing the desktop breakpoint
+  // reset transient state when crossing the desktop breakpoint (resize / rotate)
   DESKTOP_QUERY.addEventListener('change', () => {
     closeAll(block);
-    setMobileMenu(wrapper, false);
+    setMobileMenu(false);
+    setLoginDrawer(false);
+    resetDrawer();
+    mountMobileLayers();
   });
 }
